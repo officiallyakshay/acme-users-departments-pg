@@ -6,6 +6,12 @@ const client = new Client('postgres://localhost/the_acme_db');
 
 client.connect();
 
+const hrID = uuid.v4();
+const salesID = uuid.v4();
+const marketingID = uuid.v4();
+const itID = uuid.v4();
+const usersWithNoDepartmentID = uuid.v4();
+
 const SQL = `
   DROP TABLE IF EXISTS users;
   DROP TABLE IF EXISTS departments;
@@ -22,9 +28,15 @@ const SQL = `
   );
 
   INSERT INTO departments(id, name)
-  values('12345', 'Accounting');
+  values('${hrID}', 'HR');
   INSERT INTO departments(id, name)
-  values('12346', 'Marketing');
+  values('${salesID}', 'Sales');
+  INSERT INTO departments(id, name)
+  values('${marketingID}', 'Marketing');
+  INSERT INTO departments(id, name)
+  values('${itID}', 'IT');
+  INSERT INTO departments(id, name)
+  values('${usersWithNoDepartmentID}', 'Users With No Department');
 
   INSERT INTO users(id, name)
   values('5678', 'Howard');
