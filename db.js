@@ -36,6 +36,10 @@ const SQL = `
   INSERT INTO departments(id, name) values('${ids.it}', 'IT');
 
   INSERT INTO users(id, name, department_id, bio) values('${ids.moe}', 'moe', '${ids.hr}', '${faker.lorem.paragraph(2)}');
+  INSERT INTO users(id, name, department_id, bio) values('${ids.larry}', 'larry', '${ids.hr}', '${faker.lorem.paragraph(2)}');
+  INSERT INTO users(id, name, department_id, bio) values('${ids.curly}', 'curly', '${ids.sales}', '${faker.lorem.paragraph(2)}');
+  INSERT INTO users(id, name, department_id, bio) values('${ids.lucy}', 'lucy', '${ids.it}', '${faker.lorem.paragraph(2)}');
+  INSERT INTO users(id, name, bio) values('${ids.shep}', 'shep', '${faker.lorem.paragraph(2)}');
 
 `
 const sync = async () => {
