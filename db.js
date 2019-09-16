@@ -1,47 +1,41 @@
-const pg = require('pg');
-const { Client } = pg;
-
+const { Client } = require('pg');
 const uuid = require('uuid');
-const client = new Client('postgres://localhost/the_acme_db');
+const faker = require('faker');
 
+const client = new Client('postgres://localhost/the_acme_db');
 client.connect();
 
-const hrID = uuid.v4();
-const salesID = uuid.v4();
-const marketingID = uuid.v4();
-const itID = uuid.v4();
-const usersWithNoDepartmentID = uuid.v4();
+const generateIds = (...names) => {
+  return names.reduce((acc, name) => {
+    acc[name] = uuid.v4();
+    return acc;
+  }, {});
+};
+
+const ids = generateIds('moe', 'larry', 'curly', 'shep', 'lucy', 'it', 'marketing', 'hr', 'sales');
 
 const SQL = `
   DROP TABLE IF EXISTS users;
   DROP TABLE IF EXISTS departments;
-  
+
   CREATE TABLE departments(
-    id INT PRIMARY KEY,
+    id UUID PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL
   );
 
   CREATE TABLE users(
-    id INT PRIMARY KEY,
+    id UUID PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,
-    department_id INT REFERENCES departments(id)
+    bio TEXT,
+    department_id UUID references departments(id)
   );
 
-  INSERT INTO departments(id, name)
-  values('${hrID}', 'HR');
-  INSERT INTO departments(id, name)
-  values('${salesID}', 'Sales');
-  INSERT INTO departments(id, name)
-  values('${marketingID}', 'Marketing');
-  INSERT INTO departments(id, name)
-  values('${itID}', 'IT');
-  INSERT INTO departments(id, name)
-  values('${usersWithNoDepartmentID}', 'Users With No Department');
+  INSERT INTO departments(id, name) values('${ids.hr}', 'HR');
+  INSERT INTO departments(id, name) values('${ids.sales}', 'Sales');
+  INSERT INTO departments(id, name) values('${ids.marketing}', 'Marketing');
+  INSERT INTO departments(id, name) values('${ids.it}', 'IT');
 
-  INSERT INTO users(id, name)
-  values('5678', 'Howard');
-  INSERT INTO users(id, name)
-  values('7890', 'Jimmy');
+  INSERT INTO users(id, name, department_id, bio) values('${ids.moe}', 'moe', '${ids.hr}', '${faker.lorem.paragraph(2)}');
 
 `
 const sync = async () => {
